@@ -7,10 +7,6 @@
 #+REVEAL_TRANS: linear
 #+REVEAL_THEME: lvh
 
-* Slides
-
-  ~https://www.lvh.io/CCryptoClojure~
-
 * Introduction
 
 ** Who am I?
@@ -19,72 +15,64 @@
    <img style="width:70%" src="./media/lvh.svg">
    #+END_HTML
 
-** ‌
-
-   #+ATTR_HTML: :style width:80%
-   [[./media/RMSLogoWithTextmarkLight.png]]
+** ‌Latacora
 
 ** C, Crypto & Clojure
 
    (with ✨)
 
-** Why C?
+** ~(apply clojure @life)~
 
-   * More about FFI than C
-   * Equivalent: "why only JVM?"
-     * Existing libraries are not JVM-default
-   * Crypto, OS features, native GUI, GPU...
+   * Modern lisp
+   * Targets /JVM/, JS, CLR
+
+** Why Clojure?
+
+   * I love Clojure
+   * Easier R&D
 
 ** Why crypto?
 
    * That's what I do
    * Don't implement your own crypto
-   * C API as a ~.h~, really about the OS ABI
    * ~PCLMULQDQ~, ~AES-NI~, &c
 
-** Why Clojure?
+** Why C?
 
-   * {I, we} use it a lot
-   * Easier R&D (more on that later)
+   * More about OS ABI ("native code") than C
+   * Converse: "why only use the JVM?"
+   * Crypto, OS features, native GUI, GPU...
 
-** ~(apply clojure @life)~
+* Let's call some native code!
 
-   * Modern lisp
-   * Targets /JVM/, JS, CLR...
+** How do you call native code?
 
-* Challenges
-
-** JVM
-
-   * Its own ecosystem
-   * Includes cryptography
-
-** Let's call some native code!
-
+   #+ATTR_REVEAL: :frag (roll-in)
    * JNI 😭
    * JNA 😢
    * JNR 😒
 
 ** JNI
 
-   * Code → JNI call → | JNI impl → library
-   * Bunch of ugly generated C to compile
-   * Good luck shipping
+   Code → JNI call
+
+   #+ATTR_HTML: :style font-size:50px;transform:rotate(135deg)
+   ⟿
+
+   ~JNI impl -> lib~
 
 ** JNA
 
-   I'd tell you about perf but still waiting for call to return
+   Perf matters
 
 ** JNR
 
-   * Code → JNR stub → JNI call → | JNI impl → libffi → library
-   * ~JNI performance, none of the JNI pain thanks to libffi
+   Code → JNR stub → JNI call
 
-** libffi
+   #+ATTR_HTML: :style font-size:50px;transform:rotate(150deg)
+   ⟿
 
-   * Used for FFI everywhere
-   * Tiny, standard native lib to port
-   * Generates what you need
+   ~JNI impl -> libffi -> lib~
 
 ** ~jnr-ffi~
 
@@ -108,26 +96,32 @@
 
 ** Thanks JRuby!
 
-   fs, subprocesses, stat, tty/pty/fnctl, fast IO
+   fs, subprocesses, stat, tty/pty/fcntl, fast IO
 
-** How much Java do I need to write?
+** Off-the-shelf
+
+   ~jnr-posix~, ~jnr-enxio~, ~jnr-unixsocket~, ...
+
+* Let's go write some Java!
+
+** How much Java?
 
    #+BEGIN_src shell
-   lvh@zygalski ~/P/libsodium (master)> wc -l **h
+   $ wc -l **h
    ...
    9166 total
    #+END_src
 
    😰
 
-** Well, OK, but it's easy Java right?
+** Well, OK, but it's easy Java, right?
 
    * libsodium is mostly ~char *~
-   * That's easy to bind, right?
+   * That should be easy to bind
 
-** So many byte types
+** So many types
 
-   ~Pointer~, ~Buffer~, ~String~, ~[B~, ~ByteBuffer~...
+   Pointer, Buffer, String, [B, ByteBuffer...
 
 ** Return type?
 
@@ -149,25 +143,36 @@
 
    ~thousands exposed syms
 
-** ~Pointer~, ~Buffer~
+** Pick a type
 
-   🚫
+   * Pointer, Buffer: 🚫
+   * String: 🚫 (except constants)
+   * [B, ByteBuffer: ?
 
-** ~String?~
+** [B advantages
 
-   🚫 (except constants)
+   * By far most common type
+   * Easy to use, e.g. serializers
 
-** ~[B~
+** ByteBuffer advantages
 
-   ?
+   * Supported API for "direct" allocation
+   * Cheap slicing, "views" over memory
 
-** ~java.nio.ByteBuffer~
+** Asymmetry
 
-   ?
+   ByteBuffer → byte array: fast!
 
-** Both!
+   byte array ← ByteBuffer: slow!
 
+** Conclusion
 
+   * Expose everything
+   * In-place API:
+     * Takes buffers only
+   * Functional:
+     * Takes anything, wraps to buf
+     * Returns a byte array
 
 * How Clojure helped
 
@@ -175,7 +180,7 @@
 
    Doesn't hide Java/JVM
 
-** ~definterface~
+** definterface
 
    #+BEGIN_src clojure
      (definterface LibC
@@ -189,26 +194,195 @@
    * Have data
    * Don't mess it up
 
+** Expose every byte type
+
+   ~(mapcat permuted-byte-types raw-bound-fns)~
+
+   * Specify once with bytes
+   * Get ByteBuffer permutations for free
+
+** ~@IgnoreError~
+
+   * JVM (OpenJDK) uses ~errno~
+   * So does some C code
+   * Gotta save and restore
+
+** ~@IgnoreError~
+
+   Just map a function over some values
+
+** ~defconsts~
+
+   #+BEGIN_SRC clojure
+     ;; in caesium.crypto.secretbox
+     (defconsts [keybytes noncebytes macbytes primitive])
+   #+END_SRC
+
 ** ✨
 
-** Helping outside of caesium
+   #+BEGIN_SRC clojure
+     ;; in caesium.crypto.box
+     (✨ open-easy m c n pk sk)
+     ;; =>
+     (.crypto_box_open_easy
+      m c (long (buflen c))
+      n pk sk)
+    #+END_SRC
 
-   * Paul Kehrer (@reaperhulk)
-   * of Frinkiac/Morbotron fame
-   * professionally screws with OpenSSL
-   * (co-founded pyca/cryptography)
+** Performance
 
-** Oblig. Morbotron
+   * Penalty measured in ~2 x86_64 instrs
+   * Branch-prediction-friendly
 
-   [[./media/jealous.jpg]]
+** JVM tooling is awesome
 
-** ﻿Olbig. Morbotron
+   #+BEGIN_SRC text
 
-   [[./media/evil.jpg]]
+       0x00007fb8a181a2d6: cmp    rax,QWORD PTR [rsi+0x8]
+       0x00007fb8a181a2da: jne    0x00007fb8a1045b60  ;   {runtime_call}
+     [Verified Entry Point]
+       0x00007fb8a181a2e0: mov    DWORD PTR [rsp-0x14000],eax
+       0x00007fb8a181a2e7: push   rbp
+       0x00007fb8a181a2e8: sub    rsp,0x30           ;*aload_0
+                                                     ; - clojure.lang.ASeq::size@0 (line 188)
+
+       0x00007fb8a181a2ec: nop
+       0x00007fb8a181a2ed: movabs rax,0xffffffffffffffff
+       0x00007fb8a181a2f7: call   0x00007fb8a1045f60  ; OopMap{off=60}
+                                                     ;*invokevirtual count
+                                                     ; - clojure.lang.ASeq::size@1 (line 188)
+                                                     ;   {virtual_call}
+       0x00007fb8a181a2fc: add    rsp,0x30
+       0x00007fb8a181a300: pop    rbp
+       0x00007fb8a181a301: test   DWORD PTR [rip+0x18527df9],eax        # 0x00007fb8b9d42100
+   #+END_SRC
+
+** Yay open sores
+
+   * At least one bug in jnr
+   * At least one bug in Clojure
+   * Zero-copy for cffi (Python)
 
 * Nonce-misuse resistant cryptography
 
-**
+** Encrypting with nonces
+
+   Number used once
+
+** What if I don't?
+
+   * Probably decrypt those ctexts
+   * Arbitrary forgeries afterwards
+
+** API
+
+   ~E(k, n, p) -> c~
+
+** Is this the default API we want?
+
+** GCM has other problems
+
+   (not gonna talk about them now)
+
+** Confusing!
+
+   GCM was the good ciphersuite, right?!
+
+** TLS alternatives are worse
+
+** GCM is fine /in 1 specific case/
+
+   * Short-lived keys
+   * Coordination about nonces
+
+   ... so just use TLS!
+
+** Distributed systems
+
+   Encrypting a cookie or DB entry
+
+** Programmers don't grok IVs/nonces
+
+   Evidence in how often they...
+
+   * mess them up
+   * end up with ECB
+
+** OK, so randomize the nonce!
+
+   Nope!
+
+   * GCM: 96 bits
+   * Salsa20: 64 bits
+
+** People still mess it up
+
+   * Nonce reuse in TLS
+   * Bad random during encryption
+
+** Fernet
+
+   * Right API! ~E(k, p) -> c~
+   * Safe! (IND-CCA2, EtM)
+   * Weird choices
+   * Encryption-time random
+
+** Goals
+
+   Fernet, modern crypto done right
+
+** Goals
+
+   * Easy API
+   * Only safe choices
+   * Easy to implement
+   * Easy security proof
+   * Wide security margin
+   * Fast enough (~10% penalty)
+
+** Busted RNG & reused nonce
+
+   total catastrophe
+
+   (decrypt, forge)
+
+   ⬇
+
+   attacker can detect duplicates
+
+   (not decrypt, not forge)
+
+** Idea: synthesize nonce from plaintext
+
+   (maybe mix with randomness)
+
+** Started as research about "keywrap"
+
+   Deterministic encryption
+
+** ~magicnonce~
+
+   * ~secretbox-rnd~
+   * ~secretbox-det~
+   * ~secretbox-nmr~
+
+** Rough idea
+
+   BLAKE2b as a PRF →  nonce
+   XSalsa20 + Poly1305 (big nonce space)
+
+** Perf!
+
+   Pretty good (but wait for the paper)
+
+** What about CAESAR?
+
+   * Serves any masters!
+   * Only 1 NMR suite in round 3: AEZ
+   * Perf always worse, but how much?
+   * Not worth it for TLS-like protocols
+
+** What about GCM-SIV?
 
 * Q&A
 
