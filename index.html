@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>C, Crypto &amp; Clojure</title>
+<meta name="author" content="(@lvh)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/css/theme/lvh.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = './reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">C, Crypto &amp; Clojure</h1><h2 class="author">@lvh</h2>
+</section>
+
+<section>
+<section id="slide-orgheadline1">
+<h2 id="orgheadline1">Slides</h2>
+<p>
+<code>https://www.lvh.io/CCryptoClojure</code>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline8">
+<h2 id="orgheadline8">Introduction</h2>
+<div class="outline-text-2" id="text-orgheadline8">
+</div></section>
+<section id="slide-orgheadline2">
+<h3 id="orgheadline2">Who am I?</h3>
+<img style="width:70%" src="./media/lvh.svg">
+
+</section>
+<section id="slide-orgheadline3">
+<h3 id="orgheadline3">‌</h3>
+
+<div class="figure">
+<p><img src="./media/RMSLogoWithTextmarkLight.png" alt="RMSLogoWithTextmarkLight.png" style="width:80%" />
+</p>
+</div>
+
+</section>
+<section id="slide-orgheadline4">
+<h3 id="orgheadline4">C, Crypto &amp; Clojure</h3>
+<p>
+(with ✨)
+</p>
+
+</section>
+<section id="slide-orgheadline5">
+<h3 id="orgheadline5">Why C?</h3>
+<ul>
+<li>Don't implement your own crypto</li>
+<li>C API as a <code>.h</code>, really about the OS ABI</li>
+<li><code>PCLMULQDQ</code>, <code>AES-NI</code>, &amp;c</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline6">
+<h3 id="orgheadline6">Why Clojure?</h3>
+<ul>
+<li>We use it a lot</li>
+<li>Easier</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline7">
+<h3 id="orgheadline7"><code>(apply clojure @life)</code></h3>
+<ul>
+<li>Modern lisp</li>
+<li>Targets <i>JVM</i>, JS, CLR&#x2026;</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline14">
+<h2 id="orgheadline14">Challenges</h2>
+<div class="outline-text-2" id="text-orgheadline14">
+</div></section>
+<section id="slide-orgheadline9">
+<h3 id="orgheadline9">JVM</h3>
+<ul>
+<li>Its own ecosystem</li>
+<li>Includes cryptography</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline10">
+<h3 id="orgheadline10">Let's call some native code!</h3>
+<ul>
+<li>JNI 😭</li>
+<li>JNA 😢</li>
+<li>JNR 😒</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline11">
+<h3 id="orgheadline11"><code>jnr-ffi</code></h3>
+<div class="org-src-container">
+
+<pre  class="src src-java"><span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">interface</span> <span style="color: #81a2be;">LibC</span>  {
+    <span style="color: #b5bd68;">public</span> <span style="color: #81a2be;">int</span> <span style="color: #de935f;">gettimeofday</span>(
+        <span style="color: #81a2be;">@Out</span> <span style="color: #81a2be;">@Transient</span> <span style="color: #81a2be;">Timeval</span> <span style="color: #f0c674;">tv</span>,
+        <span style="color: #81a2be;">Pointer</span> <span style="color: #f0c674;">unused</span>
+    );
+}
+</pre>
+</div>
+
+</section>
+<section id="slide-orgheadline12">
+<h3 id="orgheadline12">struct</h3>
+<div class="org-src-container">
+
+<pre  class="src src-java"><span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">static</span> <span style="color: #b5bd68;">final</span> <span style="color: #b5bd68;">class</span> <span style="color: #81a2be;">Timeval</span> <span style="color: #b5bd68;">extends</span> <span style="color: #81a2be;">Struct</span> {
+    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">final</span> <span style="color: #81a2be;">time_t</span> <span style="color: #f0c674;">tv_sec</span> = <span style="color: #b5bd68;">new</span> <span style="color: #81a2be;">time_t</span>();
+    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">final</span> <span style="color: #81a2be;">SignedLong</span> <span style="color: #f0c674;">tv_usec</span> = <span style="color: #b5bd68;">new</span> <span style="color: #81a2be;">SignedLong</span>();
+}
+</pre>
+</div>
+
+</section>
+<section id="slide-orgheadline13">
+<h3 id="orgheadline13">　</h3>
+<div class="org-src-container">
+
+<pre  class="src src-shell">lvh@zygalski ~/P/libsodium (master)&gt; wc -l **h
+...
+9166 total
+</pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline20">
+<h2 id="orgheadline20">How Clojure helped</h2>
+<div class="outline-text-2" id="text-orgheadline20">
+</div></section>
+<section id="slide-orgheadline15">
+<h3 id="orgheadline15">The Clojure way</h3>
+<ul>
+<li>Have data</li>
+<li>Don't mess it up</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline16">
+<h3 id="orgheadline16">✨</h3>
+
+</section>
+<section id="slide-orgheadline17">
+<h3 id="orgheadline17">Helping outside of caesium</h3>
+<ul>
+<li>Paul Kehrer (@reaperhulk)</li>
+<li>of Frinkiac/Morbotron fame</li>
+<li>professionally screws with OpenSSL</li>
+<li>(co-founded pyca/cryptography)</li>
+
+</ul>
+
+</section>
+<section id="slide-orgheadline18">
+<h3 id="orgheadline18">﻿</h3>
+
+<div class="figure">
+<p><img src="./media/jealous.jpg" alt="jealous.jpg" style="width:80%" />
+</p>
+</div>
+
+</section>
+<section id="slide-orgheadline19">
+<h3 id="orgheadline19">﻿</h3>
+
+<div class="figure">
+<p><img src="./media/evil.jpg" alt="evil.jpg" style="width:80%" />
+</p>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline21">
+<h2 id="orgheadline21">Nonce-misuse resistant cryptography</h2>
+<p>
+**
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline22">
+<h2 id="orgheadline22">Q&amp;A</h2>
+<p>
+<code>@lvh</code>
+</p>
+
+<p>
+<code>_@lvh.io</code>
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/lib/js/head.min.js"></script>
+<script src="./reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: true,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: './reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: './reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: './reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

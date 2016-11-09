@@ -1,0 +1,217 @@
+#+Title: C, Crypto & Clojure
+#+Author: @lvh
+#+Email: _@lvh.io
+
+#+OPTIONS: toc:nil reveal_rolling_links:nil num:nil reveal_history:true
+#+OPTIONS: timestamp:nil
+#+REVEAL_TRANS: linear
+#+REVEAL_THEME: lvh
+
+* Slides
+
+  ~https://www.lvh.io/CCryptoClojure~
+
+* Introduction
+
+** Who am I?
+
+   #+BEGIN_HTML
+   <img style="width:70%" src="./media/lvh.svg">
+   #+END_HTML
+
+** ‌
+
+   #+ATTR_HTML: :style width:80%
+   [[./media/RMSLogoWithTextmarkLight.png]]
+
+** C, Crypto & Clojure
+
+   (with ✨)
+
+** Why C?
+
+   * More about FFI than C
+   * Equivalent: "why only JVM?"
+     * Existing libraries are not JVM-default
+   * Crypto, OS features, native GUI, GPU...
+
+** Why crypto?
+
+   * That's what I do
+   * Don't implement your own crypto
+   * C API as a ~.h~, really about the OS ABI
+   * ~PCLMULQDQ~, ~AES-NI~, &c
+
+** Why Clojure?
+
+   * {I, we} use it a lot
+   * Easier R&D (more on that later)
+
+** ~(apply clojure @life)~
+
+   * Modern lisp
+   * Targets /JVM/, JS, CLR...
+
+* Challenges
+
+** JVM
+
+   * Its own ecosystem
+   * Includes cryptography
+
+** Let's call some native code!
+
+   * JNI 😭
+   * JNA 😢
+   * JNR 😒
+
+** JNI
+
+   * Code → JNI call → | JNI impl → library
+   * Bunch of ugly generated C to compile
+   * Good luck shipping
+
+** JNA
+
+   I'd tell you about perf but still waiting for call to return
+
+** JNR
+
+   * Code → JNR stub → JNI call → | JNI impl → libffi → library
+   * ~JNI performance, none of the JNI pain thanks to libffi
+
+** libffi
+
+   * Used for FFI everywhere
+   * Tiny, standard native lib to port
+   * Generates what you need
+
+** ~jnr-ffi~
+
+   #+BEGIN_src java
+     public interface LibC  {
+         public int gettimeofday(
+             @Out @Transient Timeval tv,
+             Pointer unused
+         );
+     }
+   #+END_src
+
+** struct
+
+   #+BEGIN_src java
+     public static final class Timeval extends Struct {
+         public final time_t tv_sec = new time_t();
+         public final SignedLong tv_usec = new SignedLong();
+     }
+   #+END_src
+
+** Thanks JRuby!
+
+   fs, subprocesses, stat, tty/pty/fnctl, fast IO
+
+** How much Java do I need to write?
+
+   #+BEGIN_src shell
+   lvh@zygalski ~/P/libsodium (master)> wc -l **h
+   ...
+   9166 total
+   #+END_src
+
+   😰
+
+** Well, OK, but it's easy Java right?
+
+   * libsodium is mostly ~char *~
+   * That's easy to bind, right?
+
+** So many byte types
+
+   ~Pointer~, ~Buffer~, ~String~, ~[B~, ~ByteBuffer~...
+
+** Return type?
+
+   One per fn, or by input type?
+
+** Functional vs mutate in place
+
+   * ~void f(*int out, int x)~
+   * ~int f(int x)~
+
+** Getting to the right type
+
+   * Conversions? (Copying!)
+   * Reflection? (Slow!)
+   * Explicit dispatch? (Large methods!)
+   * Give specific type? (Hard to use!)
+
+** Combinatorial explosion
+
+   ~thousands exposed syms
+
+** ~Pointer~, ~Buffer~
+
+   🚫
+
+** ~String?~
+
+   🚫 (except constants)
+
+** ~[B~
+
+   ?
+
+** ~java.nio.ByteBuffer~
+
+   ?
+
+** Both!
+
+
+
+* How Clojure helped
+
+** Host interop
+
+   Doesn't hide Java/JVM
+
+** ~definterface~
+
+   #+BEGIN_src clojure
+     (definterface LibC
+       (^int gettimeofday
+        [^Timeval ^{Out {} Transient {}} tv
+         ^Pointer unused]))
+   #+END_src
+
+** The Clojure way
+
+   * Have data
+   * Don't mess it up
+
+** ✨
+
+** Helping outside of caesium
+
+   * Paul Kehrer (@reaperhulk)
+   * of Frinkiac/Morbotron fame
+   * professionally screws with OpenSSL
+   * (co-founded pyca/cryptography)
+
+** Oblig. Morbotron
+
+   [[./media/jealous.jpg]]
+
+** ﻿Olbig. Morbotron
+
+   [[./media/evil.jpg]]
+
+* Nonce-misuse resistant cryptography
+
+**
+
+* Q&A
+
+  ~@lvh~
+
+  ~_@lvh.io~
