@@ -21,11 +21,6 @@
 
    (with ✨)
 
-** ~(apply clojure @life)~
-
-   * Modern lisp
-   * Targets /JVM/, JS, CLR
-
 ** Why Clojure?
 
    * I love Clojure
@@ -389,3 +384,5 @@
   ~@lvh~
 
   ~_@lvh.io~
+
+  ~lvh@latacora.com~, ~https://latacora.com~
