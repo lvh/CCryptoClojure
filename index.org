@@ -9,13 +9,16 @@
 
 * Introduction
 
-** Who am I?
+** 　
 
-   #+BEGIN_HTML
-   <img style="width:70%" src="./media/lvh.svg">
-   #+END_HTML
+   #+REVEAL_HTML: <img style="width:70%" src="./media/lvh.svg">
 
-** ‌Latacora
+** 　
+   :PROPERTIES:
+   :reveal_background: #DFEFDE
+   :END:
+
+   #+REVEAL_HTML: <img style="width:70%" src="./media/Latacora.svg">
 
 ** C, Crypto & Clojure
 
@@ -38,7 +41,7 @@
    * Converse: "why only use the JVM?"
    * Crypto, OS features, native GUI, GPU...
 
-* Let's call some native code!
+* Let's call native code!
 
 ** How do you call native code?
 
@@ -55,6 +58,16 @@
    ⟿
 
    ~JNI impl -> lib~
+
+** JNI
+
+ #+BEGIN_SRC java
+   private native void doSomething();
+ #+END_SRC
+
+** JNI
+
+   ~javah~ + toolchain
 
 ** JNA
 
@@ -232,7 +245,6 @@
 ** JVM tooling is awesome
 
    #+BEGIN_SRC text
-
        0x00007fb8a181a2d6: cmp    rax,QWORD PTR [rsi+0x8]
        0x00007fb8a181a2da: jne    0x00007fb8a1045b60  ;   {runtime_call}
      [Verified Entry Point]
