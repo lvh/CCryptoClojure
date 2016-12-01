@@ -36,6 +36,7 @@
 ** Why crypto?
 
    * That's what I do
+   * Don't reimplement your own crypto
    * ~PCLMULQDQ~, ~AES-NI~, &c
 
 ** Why C?
@@ -455,19 +456,31 @@
 
    #+BEGIN_SRC clojure
      (defmacro ✨
-       "Produces a form for calling named fn with lots of magic:
+       "Produces a form for calling named fn with lots of
+       magic:
 
-       ,* The fn-name is specified using its short name, which is resolved
-         against the ns as per [[defconsts]].
+       ,* The fn-name is specified using its short name,
+         which is resolved against the ns as per [[defconsts]].
        ,* All bufs are annotated as ByteBuffers.
        ,* Buffer lengths are automatically added.
 
-       The emoji name of this macro accurately reflects how easy I want it
-       to be for third parties to call it."
+       The emoji name of this macro accurately reflects how
+       easy I want it to be for third parties to call it."
        ;; ...
        )
    #+END_SRC
+
+** This stuff matters
+
+   * Repetition leads to mistakes
+   * API consistency through laziness
+
 * Conclusion
+
+** Clojure 💖 native libs
+
+   * You might not need them
+   * Don't despair if you do
 
 ** Yay open sores
 
@@ -604,7 +617,9 @@
 
 * Thanks!
 
+  * Conj organizers
   * Wayne Meissner, Charles Nutter (JNR)
+  * Paul Kehrer, PyCA
 
 * Q&A
 
