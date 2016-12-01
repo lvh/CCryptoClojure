@@ -30,27 +30,24 @@
 
 ** Why Clojure?
 
-   * We 💖 Clojure
+   * I 💖 Clojure
    * Easier R&D
 
 ** Why crypto?
 
    * That's what I do
-   * Don't implement your own crypto
    * ~PCLMULQDQ~, ~AES-NI~, &c
 
 ** Why C?
 
    * More about OS ABI ("native code") than C
-   * Converse: "why only use the JVM?"
+   * Converse: "why only use the JVM/Clojure?"
    * Performance, but not only about performance
-   * Crypto, OS features, procs, network, native GUI, GPU...
+   * Crypto, OS features, native GUI, GPU...
 
 * Let's call native code!
 
   (on the JVM, for now)
-
-** How do you call native code?
 
 ** JNI
 
@@ -92,7 +89,8 @@
      ,* Method:    getpid
      ,* Signature: ()J
      ,*/
-    JNIEXPORT jlong JNICALL Java_io_lvh_cljn_NativeStuff_getpid (JNIEnv *, jclass);
+    JNIEXPORT jlong JNICALL Java_io_lvh_cljn_NativeStuff_getpid
+        (JNIEnv *, jclass);
   #ifdef __cplusplus
   }
   #endif
@@ -108,6 +106,10 @@
        return getpid();
      }
 #+END_SRC
+
+** Toolchain
+
+   ᛠᛰᛜᛍᛥ ᚥᚮ‽
 
 ** Clojure + JNI in the wild
 
@@ -155,17 +157,17 @@
 ** Worst of both worlds?!
 
    * JNI platform-specific part is shared
-   * JNR-specific part is generated
    * Probably ships with support for your platform
+   * JNR-specific part is generated
 
-** Worst of both worlds?!
+** Best of both worlds
 
    JNA UX + JNI perf
 
 ** ~jnr-ffi~
 
    #+BEGIN_src java
-     public interface LibC  {
+     public interface LibC {
          public int gettimeofday(
              @Out @Transient Timeval tv,
              Pointer unused
@@ -194,12 +196,14 @@
 
    ~jnr-constants~, ~jnr-x86asm~, ...
 
-* Let's go write some Java!
+* Let's go write some code!
 
-** ~libsodium~
+  (probably Java I guess?)
+
+** ~caesium~ :: ~libsodium~
 
    * Cryptographic library
-   * nacl but buildable and with cheese
+   * NaCl with cheese
 
 ** How much Java?
 
@@ -221,29 +225,31 @@
 
 ** Return type?
 
-   One per fn, or by input type?
+   * Fn for each one, or by input type?
+   * ~encrypt-to-buf~, ~encrypt-to-array~, ...
+   * What if you call me with 4 different types?
 
 ** Functional vs mutate in place
 
    * ~void f(*int out, int x)~
    * ~int f(int x)~
 
-** Getting to the right type
+** Getting the right types
 
    * Conversions? (Copying!)
-   * Reflection? (Slow!)
+   * Reflection? (Slow, buggy!)
    * Explicit dispatch? (Large methods!)
    * Give specific type? (Hard to use!)
 
 ** Combinatorial explosion
 
-   ~thousands exposed syms
+   Thousands of exposed syms
 
 ** Pick a type
 
-   * Pointer, Buffer: 🚫
+   * Pointer: 🚫
    * String: 🚫 (except constants)
-   * [B, ByteBuffer: ?
+   * [B, ByteBuf fer: ?
 
 ** [B advantages
 
@@ -257,9 +263,11 @@
 
 ** Asymmetry
 
-   ByteBuffer → byte array: fast!
+   byte array → indirect ByteBuffer: fast!
 
-   byte array ← ByteBuffer: slow!
+   indirect ByteBuffer → byte array: fast?
+
+   direct ByteBuffer ↔ byte array: slow!
 
 ** Conclusion
 
@@ -334,6 +342,34 @@
      0x00007fb8a181a301: test   DWORD PTR [rip+0x18527df9],eax
    #+END_SRC
 
+** JNR tricks
+
+   Mostly ~@Annotations~
+
+** ~@IgnoreError~
+
+   * JVM (OpenJDK) uses ~errno~
+   * So does some C code
+   * Gotta save and restore
+
+** ~@In~ and ~@Out~
+
+   * Value gets copied to & from
+   * ~@In~: only copy to native
+   * ~@Out~: only copy from native
+
+** ~@Pinned~
+
+   * Don't copy the value at all
+   * Tell JVM not to move it
+   * Pass the pointer straight to C
+
+** ~@Direct~ and ~@Transient~
+
+   Native backing memory
+
+** Opt-in
+
 * How Clojure helped
 
 ** ~caesium~
@@ -387,12 +423,6 @@
 
 ** ~@IgnoreError~
 
-   * JVM (OpenJDK) uses ~errno~
-   * So does some C code
-   * Gotta save and restore
-
-** ~@IgnoreError~
-
    Just map a function over some values
 
 ** ~defconsts~
@@ -400,6 +430,14 @@
    #+BEGIN_SRC clojure
      ;; in caesium.crypto.secretbox
      (defconsts [keybytes noncebytes macbytes primitive])
+     ;; =>
+     (do
+       (def keybytes
+         "Constant returned by `crypto_secretbox_keybytes`.
+         See libsodium docs."
+         (.crypto_secretbox_keybytes caesium.binding/sodium))
+       ;;...
+       )
    #+END_SRC
 
 ** ✨
@@ -413,13 +451,35 @@
       n pk sk)
     #+END_SRC
 
+** ✨
+
+   #+BEGIN_SRC clojure
+     (defmacro ✨
+       "Produces a form for calling named fn with lots of magic:
+
+       ,* The fn-name is specified using its short name, which is resolved
+         against the ns as per [[defconsts]].
+       ,* All bufs are annotated as ByteBuffers.
+       ,* Buffer lengths are automatically added.
+
+       The emoji name of this macro accurately reflects how easy I want it
+       to be for third parties to call it."
+       ;; ...
+       )
+   #+END_SRC
 * Conclusion
 
 ** Yay open sores
 
-   * At least one bug in jnr
-   * At least one bug in Clojure
-   * Zero-copy for cffi (Python)
+   * JNR is great!
+   * At least one bug in jnr & Clojure
+   * Zero-copy for cffi, PyCA/cryptography
+
+** Future work
+
+   * CLJS (native library on V8, vs emscripten in the browser?)
+   * Ship native binaries with caesium
+   * Bind all of libsodium
 
 * Nonce-misuse resistant cryptography
 
@@ -542,13 +602,19 @@
 
 ** What about GCM-SIV?
 
+* Thanks!
+
+  * Wayne Meissner, Charles Nutter (JNR)
+
 * Q&A
 
   ~@lvh~
 
   ~_@lvh.io~
 
-  ~lvh@latacora.com~, ~https://latacora.com~
+  ~https://latacora.com~
+
+  ~{lvh,youagain}@latacora.com~
 
 * Slides
 

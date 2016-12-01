@@ -30,8 +30,8 @@
 </section>
 
 <section>
-<section id="slide-org196c216">
-<h2 id="org196c216">Slides</h2>
+<section id="slide-orgc5e0b51">
+<h2 id="orgc5e0b51">Slides</h2>
 <p>
 <a href="https://lvh.io/CCryptoClojure">https://lvh.io/CCryptoClojure</a>
 </p>
@@ -39,72 +39,67 @@
 </section>
 </section>
 <section>
-<section id="slide-org8b8eaf0">
-<h2 id="org8b8eaf0">Introduction</h2>
-<div class="outline-text-2" id="text-org8b8eaf0">
+<section id="slide-org4483629">
+<h2 id="org4483629">Introduction</h2>
+<div class="outline-text-2" id="text-org4483629">
 </div></section>
-<section id="slide-org6c477f0">
-<h3 id="org6c477f0">　</h3>
+<section id="slide-org285892a">
+<h3 id="org285892a">　</h3>
 <img style="width:70%" src="./media/lvh.svg">
 
 </section>
-<section id="slide-org5e110fd" data-background="#DFEFDE">
-<h3 id="org5e110fd">　</h3>
+<section id="slide-org8670b45" data-background="#DFEFDE">
+<h3 id="org8670b45">　</h3>
 <img style="width:70%" src="./media/Latacora.svg">
 
 </section>
-<section id="slide-org63cef77">
-<h3 id="org63cef77">C, Crypto &amp; Clojure</h3>
+<section id="slide-orgd207555">
+<h3 id="orgd207555">C, Crypto &amp; Clojure</h3>
 <p>
 (with ✨)
 </p>
 
 </section>
-<section id="slide-orgde890da">
-<h3 id="orgde890da">Why Clojure?</h3>
+<section id="slide-org114d621">
+<h3 id="org114d621">Why Clojure?</h3>
 <ul>
-<li>We 💖 Clojure</li>
+<li>I 💖 Clojure</li>
 <li>Easier R&amp;D</li>
 
 </ul>
 
 </section>
-<section id="slide-org6b4b234">
-<h3 id="org6b4b234">Why crypto?</h3>
+<section id="slide-org9597579">
+<h3 id="org9597579">Why crypto?</h3>
 <ul>
 <li>That's what I do</li>
-<li>Don't implement your own crypto</li>
 <li><code>PCLMULQDQ</code>, <code>AES-NI</code>, &amp;c</li>
 
 </ul>
 
 </section>
-<section id="slide-orgdbf0f1e">
-<h3 id="orgdbf0f1e">Why C?</h3>
+<section id="slide-orge260204">
+<h3 id="orge260204">Why C?</h3>
 <ul>
 <li>More about OS ABI ("native code") than C</li>
-<li>Converse: "why only use the JVM?"</li>
+<li>Converse: "why only use the JVM/Clojure?"</li>
 <li>Performance, but not only about performance</li>
-<li>Crypto, OS features, procs, network, native GUI, GPU&#x2026;</li>
+<li>Crypto, OS features, native GUI, GPU&#x2026;</li>
 
 </ul>
 
 </section>
 </section>
 <section>
-<section id="slide-org00d8112">
-<h2 id="org00d8112">Let's call native code!</h2>
+<section id="slide-org2ad9940">
+<h2 id="org2ad9940">Let's call native code!</h2>
 <p>
 (on the JVM, for now)
 </p>
 
 </section>
-<section id="slide-orgfceaaf5">
-<h3 id="orgfceaaf5">How do you call native code?</h3>
-
-</section>
-<section id="slide-orgb358ce3">
-<h3 id="orgb358ce3">JNI</h3>
+<section id="slide-org6523f64">
+<h3 id="org6523f64">JNI</h3>
 <p>
 Code → JNI call
 </p>
@@ -118,105 +113,113 @@ Code → JNI call
 </p>
 
 </section>
-<section id="slide-org028addd">
-<h3 id="org028addd">JNI</h3>
+<section id="slide-org996424d">
+<h3 id="org996424d">JNI</h3>
 <div class="org-src-container">
 
-<pre  class="src src-java"><span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">class</span> <span style="color: #81a2be;">NativeStuff</span> <span style="color: #c5c8c6;">{</span>
-    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">static</span> <span style="color: #b5bd68;">native</span> <span style="color: #81a2be;">long</span> <span style="color: #de935f;">getpid</span><span style="color: #8abeb7;">()</span>;
-    <span style="color: #969896; font-style: italic;">//            </span><span style="color: #969896; font-style: italic;">^^^^^^</span>
-    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">static</span> <span style="color: #81a2be;">void</span> <span style="color: #de935f;">main</span><span style="color: #8abeb7;">(</span><span style="color: #81a2be;">String</span><span style="color: #f0c674;">[]</span> <span style="color: #f0c674;">args</span><span style="color: #8abeb7;">)</span> <span style="color: #8abeb7;">{</span>
-        getpid<span style="color: #f0c674;">()</span>;
-    <span style="color: #8abeb7;">}</span>
-    <span style="color: #b5bd68;">static</span> <span style="color: #8abeb7;">{</span>
-        System.load<span style="color: #f0c674;">(</span><span style="color: #8abeb7;">"/some/dir/nativestuff.dylib"</span><span style="color: #f0c674;">)</span>;
-    <span style="color: #8abeb7;">}</span>
-<span style="color: #c5c8c6;">}</span>
+<pre  class="src src-java"><span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">class</span> <span style="color: #ba2f59; font-weight: bold;">NativeStuff</span> <span style="color: #3a81c3;">{</span>
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">static</span> <span style="color: #3a81c3; font-weight: bold;">native</span> <span style="color: #ba2f59; font-weight: bold;">long</span> <span style="color: #6c3163; font-weight: bold;">getpid</span><span style="color: #6c3163;">()</span>;
+    <span style="color: #2aa1ae; background-color: #ecf3ec;">//            </span><span style="color: #2aa1ae; background-color: #ecf3ec;">^^^^^^</span>
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">static</span> <span style="color: #ba2f59; font-weight: bold;">void</span> <span style="color: #6c3163; font-weight: bold;">main</span><span style="color: #6c3163;">(</span><span style="color: #ba2f59; font-weight: bold;">String</span><span style="color: #2d9574;">[]</span> <span style="color: #715ab1;">args</span><span style="color: #6c3163;">)</span> <span style="color: #6c3163;">{</span>
+        getpid<span style="color: #2d9574;">()</span>;
+    <span style="color: #6c3163;">}</span>
+    <span style="color: #3a81c3; font-weight: bold;">static</span> <span style="color: #6c3163;">{</span>
+        System.load<span style="color: #2d9574;">(</span><span style="color: #2d9574;">"/some/dir/nativestuff.dylib"</span><span style="color: #2d9574;">)</span>;
+    <span style="color: #6c3163;">}</span>
+<span style="color: #3a81c3;">}</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-orgad9d266">
-<h3 id="orgad9d266"><code>javah</code></h3>
+<section id="slide-org14359c8">
+<h3 id="org14359c8"><code>javah</code></h3>
 <div class="org-src-container">
 
-<pre  class="src src-c"><span style="color: #969896; font-style: italic;">/* </span><span style="color: #969896; font-style: italic;">DO NOT EDIT THIS FILE - it is machine generated </span><span style="color: #969896; font-style: italic;">*/</span>
-<span style="color: #b294bb;">#include</span> <span style="color: #c5c8c6;">&lt;</span><span style="color: #8abeb7;">jni.h</span><span style="color: #c5c8c6;">&gt;</span>
-<span style="color: #969896; font-style: italic;">/* </span><span style="color: #969896; font-style: italic;">Header for class io_lvh_cljn_NativeStuff </span><span style="color: #969896; font-style: italic;">*/</span>
-<span style="color: #b294bb;">#if</span><span style="color: #b294bb;">n</span><span style="color: #b294bb;">def</span> _Included_io_lvh_cljn_NativeStuff
-<span style="color: #b294bb;">#define</span> <span style="color: #f0c674;">_Included_io_lvh_cljn_NativeStuff</span>
-<span style="color: #b294bb;">#ifdef</span> __cplusplus
-<span style="color: #b5bd68;">extern</span> <span style="color: #8abeb7;">"C"</span> <span style="color: #c5c8c6;">{</span>
-<span style="color: #b294bb;">#endif</span>
-  <span style="color: #969896; font-style: italic;">/*</span>
-<span style="color: #969896; font-style: italic;">   * Class:     io_lvh_cljn_NativeStuff</span>
-<span style="color: #969896; font-style: italic;">   * Method:    getpid</span>
-<span style="color: #969896; font-style: italic;">   * Signature: ()J</span>
-<span style="color: #969896; font-style: italic;">   </span><span style="color: #969896; font-style: italic;">*/</span>
-  JNIEXPORT jlong <span style="color: #81a2be;">JNICALL</span> <span style="color: #de935f;">Java_io_lvh_cljn_NativeStuff_getpid</span> <span style="color: #8abeb7;">(</span><span style="color: #81a2be;">JNIEnv</span> *, jclass<span style="color: #8abeb7;">)</span>;
-<span style="color: #b294bb;">#ifdef</span> __cplusplus
-<span style="color: #c5c8c6;">}</span>
-<span style="color: #b294bb;">#endif</span>
-<span style="color: #b294bb;">#endif</span>
+<pre  class="src src-c"><span style="color: #2aa1ae; background-color: #ecf3ec;">/* </span><span style="color: #2aa1ae; background-color: #ecf3ec;">DO NOT EDIT THIS FILE - it is machine generated </span><span style="color: #2aa1ae; background-color: #ecf3ec;">*/</span>
+<span style="color: #6c3163;">#include</span> <span style="color: #3a81c3;">&lt;</span><span style="color: #2d9574;">jni.h</span><span style="color: #3a81c3;">&gt;</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">/* </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Header for class io_lvh_cljn_NativeStuff </span><span style="color: #2aa1ae; background-color: #ecf3ec;">*/</span>
+<span style="color: #6c3163;">#if</span><span style="color: #6c3163;">n</span><span style="color: #6c3163;">def</span> _Included_io_lvh_cljn_NativeStuff
+<span style="color: #6c3163;">#define</span> <span style="color: #715ab1;">_Included_io_lvh_cljn_NativeStuff</span>
+<span style="color: #6c3163;">#ifdef</span> __cplusplus
+<span style="color: #3a81c3; font-weight: bold;">extern</span> <span style="color: #2d9574;">"C"</span> <span style="color: #3a81c3;">{</span>
+<span style="color: #6c3163;">#endif</span>
+  <span style="color: #2aa1ae; background-color: #ecf3ec;">/*</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">   * Class:     io_lvh_cljn_NativeStuff</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">   * Method:    getpid</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">   * Signature: ()J</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">   </span><span style="color: #2aa1ae; background-color: #ecf3ec;">*/</span>
+  JNIEXPORT jlong <span style="color: #ba2f59; font-weight: bold;">JNICALL</span> <span style="color: #6c3163; font-weight: bold;">Java_io_lvh_cljn_NativeStuff_getpid</span>
+      <span style="color: #6c3163;">(</span><span style="color: #ba2f59; font-weight: bold;">JNIEnv</span> *, jclass<span style="color: #6c3163;">)</span>;
+<span style="color: #6c3163;">#ifdef</span> __cplusplus
+<span style="color: #3a81c3;">}</span>
+<span style="color: #6c3163;">#endif</span>
+<span style="color: #6c3163;">#endif</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-org39083ae">
-<h3 id="org39083ae">JNI implementation</h3>
+<section id="slide-org0c43801">
+<h3 id="org0c43801">JNI implementation</h3>
 <div class="org-src-container">
 
-<pre  class="src src-c"><span style="color: #b294bb;">#include</span> <span style="color: #8abeb7;">"lvh_io_cljn_NativeStuff.h"</span>
-jlong <span style="color: #81a2be;">JNICALL</span> <span style="color: #de935f;">Java_lvh_io_cljn_NativeStuff_getpid</span>
-<span style="color: #c5c8c6;">(</span><span style="color: #81a2be;">JNIEnv</span> *<span style="color: #f0c674;">env</span>, <span style="color: #81a2be;">jclass</span> <span style="color: #f0c674;">c</span><span style="color: #c5c8c6;">)</span> <span style="color: #c5c8c6;">{</span>
-  <span style="color: #b5bd68;">return</span> getpid<span style="color: #8abeb7;">()</span>;
-<span style="color: #c5c8c6;">}</span>
+<pre  class="src src-c"><span style="color: #6c3163;">#include</span> <span style="color: #2d9574;">"lvh_io_cljn_NativeStuff.h"</span>
+jlong <span style="color: #ba2f59; font-weight: bold;">JNICALL</span> <span style="color: #6c3163; font-weight: bold;">Java_lvh_io_cljn_NativeStuff_getpid</span>
+<span style="color: #3a81c3;">(</span><span style="color: #ba2f59; font-weight: bold;">JNIEnv</span> *<span style="color: #715ab1;">env</span>, <span style="color: #ba2f59; font-weight: bold;">jclass</span> <span style="color: #715ab1;">c</span><span style="color: #3a81c3;">)</span> <span style="color: #3a81c3;">{</span>
+  <span style="color: #3a81c3; font-weight: bold;">return</span> getpid<span style="color: #6c3163;">()</span>;
+<span style="color: #3a81c3;">}</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-orgb0a7082">
-<h3 id="orgb0a7082">Clojure + JNI in the wild</h3>
+<section id="slide-orgd94d4c5">
+<h3 id="orgd94d4c5">Toolchain</h3>
+<p>
+ᛠᛰᛜᛍᛥ ᚥᚮ‽
+</p>
+
+</section>
+<section id="slide-orgf085622">
+<h3 id="orgf085622">Clojure + JNI in the wild</h3>
 <p>
 neanderthal → opencl → jocl
 </p>
 
 <div class="org-src-container">
 
-<pre  class="src src-java"><span style="color: #b5bd68;">static</span> <span style="color: #b5bd68;">native</span> <span style="color: #81a2be;">boolean</span> <span style="color: #de935f;">initNativeLibrary</span><span style="color: #c5c8c6;">(</span><span style="color: #81a2be;">String</span> <span style="color: #f0c674;">fullName</span><span style="color: #c5c8c6;">)</span>;
+<pre  class="src src-java"><span style="color: #3a81c3; font-weight: bold;">static</span> <span style="color: #3a81c3; font-weight: bold;">native</span> <span style="color: #ba2f59; font-weight: bold;">boolean</span> <span style="color: #6c3163; font-weight: bold;">initNativeLibrary</span><span style="color: #3a81c3;">(</span><span style="color: #ba2f59; font-weight: bold;">String</span> <span style="color: #715ab1;">fullName</span><span style="color: #3a81c3;">)</span>;
 </pre>
 </div>
 
 </section>
-<section id="slide-org820d24e">
-<h3 id="org820d24e">JNI</h3>
+<section id="slide-org7da6f17">
+<h3 id="org7da6f17">JNI</h3>
 <p>
 Great, if someone else does the compily bit
 </p>
 
 </section>
-<section id="slide-org46f8ac5">
-<h3 id="org46f8ac5">JNA</h3>
+<section id="slide-org67a6c09">
+<h3 id="org67a6c09">JNA</h3>
 <div class="org-src-container">
 
-<pre  class="src src-java"><span style="color: #b5bd68;">import</span> <span style="color: #81a2be;">com</span>.<span style="color: #81a2be;">sun</span>.<span style="color: #81a2be;">jna</span>.<span style="color: #81a2be;">Library</span>;
-<span style="color: #b5bd68;">import</span> <span style="color: #81a2be;">com</span>.<span style="color: #81a2be;">sun</span>.<span style="color: #81a2be;">jna</span>.<span style="color: #81a2be;">Native</span>;
-<span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">class</span> <span style="color: #81a2be;">NativeStuff</span> <span style="color: #c5c8c6;">{</span>
-    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">interface</span> <span style="color: #81a2be;">GetPid</span> <span style="color: #b5bd68;">extends</span> <span style="color: #81a2be;">Library</span> <span style="color: #8abeb7;">{</span>
-        <span style="color: #81a2be;">long</span> <span style="color: #de935f;">getpid</span><span style="color: #f0c674;">()</span>;
-    <span style="color: #8abeb7;">}</span>
-    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">static</span> <span style="color: #81a2be;">void</span> <span style="color: #de935f;">main</span><span style="color: #8abeb7;">(</span><span style="color: #81a2be;">String</span><span style="color: #f0c674;">[]</span> <span style="color: #f0c674;">args</span><span style="color: #8abeb7;">)</span> <span style="color: #8abeb7;">{</span>
-        <span style="color: #81a2be;">GetPid</span> <span style="color: #f0c674;">getpid</span> = <span style="color: #f0c674;">(</span><span style="color: #81a2be;">GetPid</span><span style="color: #f0c674;">)</span> Native
-            .loadLibrary<span style="color: #f0c674;">(</span>GetPid.<span style="color: #b5bd68;">class</span><span style="color: #f0c674;">)</span>;
-        getpid.getpid<span style="color: #f0c674;">()</span>;
-    <span style="color: #8abeb7;">}</span>
-<span style="color: #c5c8c6;">}</span>
+<pre  class="src src-java"><span style="color: #3a81c3; font-weight: bold;">import</span> <span style="color: #4e3163;">com</span>.<span style="color: #4e3163;">sun</span>.<span style="color: #4e3163;">jna</span>.<span style="color: #ba2f59; font-weight: bold;">Library</span>;
+<span style="color: #3a81c3; font-weight: bold;">import</span> <span style="color: #4e3163;">com</span>.<span style="color: #4e3163;">sun</span>.<span style="color: #4e3163;">jna</span>.<span style="color: #ba2f59; font-weight: bold;">Native</span>;
+<span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">class</span> <span style="color: #ba2f59; font-weight: bold;">NativeStuff</span> <span style="color: #3a81c3;">{</span>
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">interface</span> <span style="color: #ba2f59; font-weight: bold;">GetPid</span> <span style="color: #3a81c3; font-weight: bold;">extends</span> <span style="color: #ba2f59; font-weight: bold;">Library</span> <span style="color: #6c3163;">{</span>
+        <span style="color: #ba2f59; font-weight: bold;">long</span> <span style="color: #6c3163; font-weight: bold;">getpid</span><span style="color: #2d9574;">()</span>;
+    <span style="color: #6c3163;">}</span>
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">static</span> <span style="color: #ba2f59; font-weight: bold;">void</span> <span style="color: #6c3163; font-weight: bold;">main</span><span style="color: #6c3163;">(</span><span style="color: #ba2f59; font-weight: bold;">String</span><span style="color: #2d9574;">[]</span> <span style="color: #715ab1;">args</span><span style="color: #6c3163;">)</span> <span style="color: #6c3163;">{</span>
+        <span style="color: #ba2f59; font-weight: bold;">GetPid</span> <span style="color: #715ab1;">getpid</span> = <span style="color: #2d9574;">(</span><span style="color: #ba2f59; font-weight: bold;">GetPid</span><span style="color: #2d9574;">)</span> Native
+            .loadLibrary<span style="color: #2d9574;">(</span>GetPid.<span style="color: #3a81c3; font-weight: bold;">class</span><span style="color: #2d9574;">)</span>;
+        getpid.getpid<span style="color: #2d9574;">()</span>;
+    <span style="color: #6c3163;">}</span>
+<span style="color: #3a81c3;">}</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-org778e921">
-<h3 id="org778e921">JNA</h3>
+<section id="slide-org967b40a">
+<h3 id="org967b40a">JNA</h3>
 <ul>
 <li>Performance isn't great</li>
 <li>Some missing features</li>
@@ -224,8 +227,8 @@ Great, if someone else does the compily bit
 </ul>
 
 </section>
-<section id="slide-orgc61cf22">
-<h3 id="orgc61cf22">JNR</h3>
+<section id="slide-orgb515c2c">
+<h3 id="orgb515c2c">JNR</h3>
 <p>
 Code → JNR stub → JNI call
 </p>
@@ -239,65 +242,65 @@ Code → JNR stub → JNI call
 </p>
 
 </section>
-<section id="slide-org582ce24">
-<h3 id="org582ce24">Worst of both worlds?!</h3>
+<section id="slide-orgc9f5efd">
+<h3 id="orgc9f5efd">Worst of both worlds?!</h3>
 <ul>
 <li>JNI platform-specific part is shared</li>
-<li>JNR-specific part is generated</li>
 <li>Probably ships with support for your platform</li>
+<li>JNR-specific part is generated</li>
 
 </ul>
 
 </section>
-<section id="slide-org5771c02">
-<h3 id="org5771c02">Worst of both worlds?!</h3>
+<section id="slide-orgebb5538">
+<h3 id="orgebb5538">Best of both worlds</h3>
 <p>
 JNA UX + JNI perf
 </p>
 
 </section>
-<section id="slide-orgecfd0e7">
-<h3 id="orgecfd0e7"><code>jnr-ffi</code></h3>
+<section id="slide-org49fffd4">
+<h3 id="org49fffd4"><code>jnr-ffi</code></h3>
 <div class="org-src-container">
 
-<pre  class="src src-java"><span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">interface</span> <span style="color: #81a2be;">LibC</span>  <span style="color: #c5c8c6;">{</span>
-    <span style="color: #b5bd68;">public</span> <span style="color: #81a2be;">int</span> <span style="color: #de935f;">gettimeofday</span><span style="color: #8abeb7;">(</span>
-        <span style="color: #81a2be;">@Out</span> <span style="color: #81a2be;">@Transient</span> <span style="color: #81a2be;">Timeval</span> <span style="color: #f0c674;">tv</span>,
-        <span style="color: #81a2be;">Pointer</span> <span style="color: #f0c674;">unused</span>
-    <span style="color: #8abeb7;">)</span>;
-<span style="color: #c5c8c6;">}</span>
+<pre  class="src src-java"><span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">interface</span> <span style="color: #ba2f59; font-weight: bold;">LibC</span> <span style="color: #3a81c3;">{</span>
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #ba2f59; font-weight: bold;">int</span> <span style="color: #6c3163; font-weight: bold;">gettimeofday</span><span style="color: #6c3163;">(</span>
+        <span style="color: #4e3163;">@Out</span> <span style="color: #4e3163;">@Transient</span> <span style="color: #ba2f59; font-weight: bold;">Timeval</span> <span style="color: #715ab1;">tv</span>,
+        <span style="color: #ba2f59; font-weight: bold;">Pointer</span> <span style="color: #715ab1;">unused</span>
+    <span style="color: #6c3163;">)</span>;
+<span style="color: #3a81c3;">}</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-org608c3d6">
-<h3 id="org608c3d6">struct</h3>
+<section id="slide-org04230dd">
+<h3 id="org04230dd">struct</h3>
 <div class="org-src-container">
 
-<pre  class="src src-java"><span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">static</span> <span style="color: #b5bd68;">final</span> <span style="color: #b5bd68;">class</span> <span style="color: #81a2be;">Timeval</span> <span style="color: #b5bd68;">extends</span> <span style="color: #81a2be;">Struct</span> <span style="color: #c5c8c6;">{</span>
-    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">final</span> <span style="color: #81a2be;">time_t</span> <span style="color: #f0c674;">tv_sec</span> = <span style="color: #b5bd68;">new</span> <span style="color: #81a2be;">time_t</span><span style="color: #8abeb7;">()</span>;
-    <span style="color: #b5bd68;">public</span> <span style="color: #b5bd68;">final</span> <span style="color: #81a2be;">SignedLong</span> <span style="color: #f0c674;">tv_usec</span> = <span style="color: #b5bd68;">new</span> <span style="color: #81a2be;">SignedLong</span><span style="color: #8abeb7;">()</span>;
-<span style="color: #c5c8c6;">}</span>
+<pre  class="src src-java"><span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">static</span> <span style="color: #3a81c3; font-weight: bold;">final</span> <span style="color: #3a81c3; font-weight: bold;">class</span> <span style="color: #ba2f59; font-weight: bold;">Timeval</span> <span style="color: #3a81c3; font-weight: bold;">extends</span> <span style="color: #ba2f59; font-weight: bold;">Struct</span> <span style="color: #3a81c3;">{</span>
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">final</span> <span style="color: #ba2f59; font-weight: bold;">time_t</span> <span style="color: #715ab1;">tv_sec</span> = <span style="color: #3a81c3; font-weight: bold;">new</span> <span style="color: #ba2f59; font-weight: bold;">time_t</span><span style="color: #6c3163;">()</span>;
+    <span style="color: #3a81c3; font-weight: bold;">public</span> <span style="color: #3a81c3; font-weight: bold;">final</span> <span style="color: #ba2f59; font-weight: bold;">SignedLong</span> <span style="color: #715ab1;">tv_usec</span> = <span style="color: #3a81c3; font-weight: bold;">new</span> <span style="color: #ba2f59; font-weight: bold;">SignedLong</span><span style="color: #6c3163;">()</span>;
+<span style="color: #3a81c3;">}</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-orga82ef92">
-<h3 id="orga82ef92">Thanks JRuby!</h3>
+<section id="slide-orgd19c849">
+<h3 id="orgd19c849">Thanks JRuby!</h3>
 <p>
 fs, subprocesses, stat, tty/pty/fcntl, fast IO
 </p>
 
 </section>
-<section id="slide-org55d697b">
-<h3 id="org55d697b">Off-the-shelf</h3>
+<section id="slide-org1380043">
+<h3 id="org1380043">Off-the-shelf</h3>
 <p>
 <code>jnr-posix</code>, <code>jnr-enxio</code>, <code>jnr-unixsocket</code>, &#x2026;
 </p>
 
 </section>
-<section id="slide-orgd2be507">
-<h3 id="orgd2be507">Tooling</h3>
+<section id="slide-org1de2599">
+<h3 id="org1de2599">Tooling</h3>
 <p>
 <code>jnr-constants</code>, <code>jnr-x86asm</code>, &#x2026;
 </p>
@@ -305,26 +308,29 @@ fs, subprocesses, stat, tty/pty/fcntl, fast IO
 </section>
 </section>
 <section>
-<section id="slide-org5326823">
-<h2 id="org5326823">Let's go write some Java!</h2>
-<div class="outline-text-2" id="text-org5326823">
-</div></section>
-<section id="slide-org7252f0c">
-<h3 id="org7252f0c"><code>libsodium</code></h3>
+<section id="slide-org000f3ca">
+<h2 id="org000f3ca">Let's go write some code!</h2>
+<p>
+(probably Java I guess?)
+</p>
+
+</section>
+<section id="slide-orgb80732a">
+<h3 id="orgb80732a"><code>caesium</code> :: <code>libsodium</code></h3>
 <ul>
 <li>Cryptographic library</li>
-<li>nacl but buildable and with cheese</li>
+<li>NaCl with cheese</li>
 
 </ul>
 
 </section>
-<section id="slide-orgb0aa4b3">
-<h3 id="orgb0aa4b3">How much Java?</h3>
+<section id="slide-orgff2c676">
+<h3 id="orgff2c676">How much Java?</h3>
 <div class="org-src-container">
 
 <pre  class="src src-shell">$ wc -l **h
 ...
-<span style="color: #81a2be;">9166</span> total
+<span style="color: #4e3163;">9166</span> total
 </pre>
 </div>
 
@@ -333,29 +339,32 @@ fs, subprocesses, stat, tty/pty/fcntl, fast IO
 </p>
 
 </section>
-<section id="slide-orgaca3707">
-<h3 id="orgaca3707">Well, OK, but it's easy Java, right?</h3>
+<section id="slide-org54a8980">
+<h3 id="org54a8980">Well, OK, but it's easy Java, right?</h3>
 <p>
 Mostly <code>char *</code>
 </p>
 
 </section>
-<section id="slide-orgc54c103">
-<h3 id="orgc54c103">So many JVM types</h3>
+<section id="slide-org0a43be8">
+<h3 id="org0a43be8">So many JVM types</h3>
 <p>
 Pointer, Buffer, String, [B, ByteBuffer&#x2026;
 </p>
 
 </section>
-<section id="slide-org985147a">
-<h3 id="org985147a">Return type?</h3>
-<p>
-One per fn, or by input type?
-</p>
+<section id="slide-org0d379fa">
+<h3 id="org0d379fa">Return type?</h3>
+<ul>
+<li>Fn for each one, or by input type?</li>
+<li><code>encrypt-to-buf</code>, <code>encrypt-to-array</code>, &#x2026;</li>
+<li>What if you call me with 4 different types?</li>
+
+</ul>
 
 </section>
-<section id="slide-orgab054f9">
-<h3 id="orgab054f9">Functional vs mutate in place</h3>
+<section id="slide-org6a05cad">
+<h3 id="org6a05cad">Functional vs mutate in place</h3>
 <ul>
 <li><code>void f(*int out, int x)</code></li>
 <li><code>int f(int x)</code></li>
@@ -363,36 +372,36 @@ One per fn, or by input type?
 </ul>
 
 </section>
-<section id="slide-orgba3e11e">
-<h3 id="orgba3e11e">Getting to the right type</h3>
+<section id="slide-orgbc76da0">
+<h3 id="orgbc76da0">Getting the right types</h3>
 <ul>
 <li>Conversions? (Copying!)</li>
-<li>Reflection? (Slow!)</li>
+<li>Reflection? (Slow, buggy!)</li>
 <li>Explicit dispatch? (Large methods!)</li>
 <li>Give specific type? (Hard to use!)</li>
 
 </ul>
 
 </section>
-<section id="slide-orgc764dc1">
-<h3 id="orgc764dc1">Combinatorial explosion</h3>
+<section id="slide-org9baf6aa">
+<h3 id="org9baf6aa">Combinatorial explosion</h3>
 <p>
-~thousands exposed syms
+Thousands of exposed syms
 </p>
 
 </section>
-<section id="slide-orgd38d02f">
-<h3 id="orgd38d02f">Pick a type</h3>
+<section id="slide-orgf630990">
+<h3 id="orgf630990">Pick a type</h3>
 <ul>
-<li>Pointer, Buffer: 🚫</li>
+<li>Pointer: 🚫</li>
 <li>String: 🚫 (except constants)</li>
-<li>[B, ByteBuffer: ?</li>
+<li>[B, ByteBuf fer: ?</li>
 
 </ul>
 
 </section>
-<section id="slide-orgc0ad377">
-<h3 id="orgc0ad377">[B advantages</h3>
+<section id="slide-org4df0669">
+<h3 id="org4df0669">[B advantages</h3>
 <ul>
 <li>By far most common type</li>
 <li>Easy to use, e.g. serializers</li>
@@ -400,8 +409,8 @@ One per fn, or by input type?
 </ul>
 
 </section>
-<section id="slide-orgec9c7b9">
-<h3 id="orgec9c7b9">ByteBuffer advantages</h3>
+<section id="slide-orgded2450">
+<h3 id="orgded2450">ByteBuffer advantages</h3>
 <ul>
 <li>Supported API for "direct" allocation</li>
 <li>Cheap slicing, "views" over memory</li>
@@ -409,19 +418,23 @@ One per fn, or by input type?
 </ul>
 
 </section>
-<section id="slide-org618755c">
-<h3 id="org618755c">Asymmetry</h3>
+<section id="slide-org26b623c">
+<h3 id="org26b623c">Asymmetry</h3>
 <p>
-ByteBuffer → byte array: fast!
+byte array → indirect ByteBuffer: fast!
 </p>
 
 <p>
-byte array ← ByteBuffer: slow!
+indirect ByteBuffer → byte array: fast?
+</p>
+
+<p>
+direct ByteBuffer ↔ byte array: slow!
 </p>
 
 </section>
-<section id="slide-org84e0dd2">
-<h3 id="org84e0dd2">Conclusion</h3>
+<section id="slide-orgb835ec8">
+<h3 id="orgb835ec8">Conclusion</h3>
 <ul>
 <li>Expose everything</li>
 <li>In-place API:
@@ -441,12 +454,12 @@ byte array ← ByteBuffer: slow!
 </section>
 </section>
 <section>
-<section id="slide-org1aae865">
-<h2 id="org1aae865">Performance</h2>
-<div class="outline-text-2" id="text-org1aae865">
+<section id="slide-org8a0448c">
+<h2 id="org8a0448c">Performance</h2>
+<div class="outline-text-2" id="text-org8a0448c">
 </div></section>
-<section id="slide-orgb368264">
-<h3 id="orgb368264">Cliff's notes</h3>
+<section id="slide-org800a0d4">
+<h3 id="org800a0d4">Cliff's notes</h3>
 <ul>
 <li>Penalty is small</li>
 <li>Options to make it tiny</li>
@@ -455,8 +468,8 @@ byte array ← ByteBuffer: slow!
 </ul>
 
 </section>
-<section id="slide-org6bce1df">
-<h3 id="org6bce1df">JITWatch</h3>
+<section id="slide-org9fc4fcf">
+<h3 id="org9fc4fcf">JITWatch</h3>
 
 <div class="figure">
 <p><img src="./media/jitwatch.png" alt="jitwatch.png" />
@@ -464,8 +477,8 @@ byte array ← ByteBuffer: slow!
 </div>
 
 </section>
-<section id="slide-orga7018bb">
-<h3 id="orga7018bb">Getting ASM dumps</h3>
+<section id="slide-org415f95e">
+<h3 id="org415f95e">Getting ASM dumps</h3>
 <p>
 <code>-XX:+UnlockDiagnosticVMOptions</code>
 </p>
@@ -475,8 +488,8 @@ byte array ← ByteBuffer: slow!
 </p>
 
 </section>
-<section id="slide-org6e5476c">
-<h3 id="org6e5476c">Getting ASM dumps</h3>
+<section id="slide-orgebf4a5c">
+<h3 id="orgebf4a5c">Getting ASM dumps</h3>
 <div class="org-src-container">
 
 <pre  class="src src-text">Java HotSpot(TM) 64-Bit Server VM
@@ -487,8 +500,8 @@ warning: PrintAssembly is enabled;
 </div>
 
 </section>
-<section id="slide-org5dbd831">
-<h3 id="org5dbd831">Getting ASM dumps</h3>
+<section id="slide-orge8095d6">
+<h3 id="orge8095d6">Getting ASM dumps</h3>
 <div class="org-src-container">
 
 <pre  class="src src-text">Java HotSpot(TM) 64-Bit Server VM
@@ -500,8 +513,8 @@ Could not load hsdis-amd64.dylib;
 </div>
 
 </section>
-<section id="slide-orgb64fc7a">
-<h3 id="orgb64fc7a">Acquire hsdis</h3>
+<section id="slide-org656515c">
+<h3 id="org656515c">Acquire hsdis</h3>
 <ul>
 <li>Check out OpenJDK</li>
 <li>Build a binutils</li>
@@ -510,63 +523,111 @@ Could not load hsdis-amd64.dylib;
 </ul>
 
 </section>
-<section id="slide-org3a4fa93">
-<h3 id="org3a4fa93">hsdis</h3>
+<section id="slide-org76d8925">
+<h3 id="org76d8925">hsdis</h3>
 <div class="org-src-container">
 
-<pre  class="src src-asm"><span style="color: #de935f;">0x00007fb8a181a2e0</span>: <span style="color: #b5bd68;">mov</span>    DWORD PTR <span style="color: #c5c8c6;">[</span>rsp-0x14000<span style="color: #c5c8c6;">]</span>,eax
-<span style="color: #de935f;">0x00007fb8a181a2e7</span>: <span style="color: #b5bd68;">push</span>   rbp
-<span style="color: #de935f;">0x00007fb8a181a2e8</span>: <span style="color: #b5bd68;">sub</span>    rsp,0x30
-<span style="color: #969896; font-style: italic;">;</span><span style="color: #969896; font-style: italic;">*aload_0</span>
-<span style="color: #969896; font-style: italic;">; </span><span style="color: #969896; font-style: italic;">- clojure.lang.ASeq::size@0 (line 188)</span>
-<span style="color: #de935f;">0x00007fb8a181a2ec</span>: <span style="color: #b5bd68;">nop</span>
-<span style="color: #de935f;">0x00007fb8a181a2ed</span>: <span style="color: #b5bd68;">movabs</span> rax,0xffffffffffffffff
-<span style="color: #de935f;">0x00007fb8a181a2f7</span>: <span style="color: #b5bd68;">call</span>   0x00007fb8a1045f60
-<span style="color: #969896; font-style: italic;">; </span><span style="color: #969896; font-style: italic;">OopMap{off=60}</span>
-<span style="color: #969896; font-style: italic;">;</span><span style="color: #969896; font-style: italic;">*invokevirtual count</span>
-<span style="color: #969896; font-style: italic;">; </span><span style="color: #969896; font-style: italic;">- clojure.lang.ASeq::size@1 (line 188)</span>
-<span style="color: #969896; font-style: italic;">;   </span><span style="color: #969896; font-style: italic;">{virtual_call}</span>
-<span style="color: #de935f;">0x00007fb8a181a2fc</span>: <span style="color: #b5bd68;">add</span>    rsp,0x30
-<span style="color: #de935f;">0x00007fb8a181a300</span>: <span style="color: #b5bd68;">pop</span>    rbp
-<span style="color: #de935f;">0x00007fb8a181a301</span>: <span style="color: #b5bd68;">test</span>   DWORD PTR <span style="color: #c5c8c6;">[</span>rip+0x18527df9<span style="color: #c5c8c6;">]</span>,eax
+<pre  class="src src-asm"><span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2e0</span>: <span style="color: #3a81c3; font-weight: bold;">mov</span>    DWORD PTR <span style="color: #3a81c3;">[</span>rsp-0x14000<span style="color: #3a81c3;">]</span>,eax
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2e7</span>: <span style="color: #3a81c3; font-weight: bold;">push</span>   rbp
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2e8</span>: <span style="color: #3a81c3; font-weight: bold;">sub</span>    rsp,0x30
+<span style="color: #2aa1ae; background-color: #ecf3ec;">;</span><span style="color: #2aa1ae; background-color: #ecf3ec;">*aload_0</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">- clojure.lang.ASeq::size@0 (line 188)</span>
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2ec</span>: <span style="color: #3a81c3; font-weight: bold;">nop</span>
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2ed</span>: <span style="color: #3a81c3; font-weight: bold;">movabs</span> rax,0xffffffffffffffff
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2f7</span>: <span style="color: #3a81c3; font-weight: bold;">call</span>   0x00007fb8a1045f60
+<span style="color: #2aa1ae; background-color: #ecf3ec;">; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">OopMap{off=60}</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">;</span><span style="color: #2aa1ae; background-color: #ecf3ec;">*invokevirtual count</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">- clojure.lang.ASeq::size@1 (line 188)</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">;   </span><span style="color: #2aa1ae; background-color: #ecf3ec;">{virtual_call}</span>
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a2fc</span>: <span style="color: #3a81c3; font-weight: bold;">add</span>    rsp,0x30
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a300</span>: <span style="color: #3a81c3; font-weight: bold;">pop</span>    rbp
+<span style="color: #6c3163; font-weight: bold;">0x00007fb8a181a301</span>: <span style="color: #3a81c3; font-weight: bold;">test</span>   DWORD PTR <span style="color: #3a81c3;">[</span>rip+0x18527df9<span style="color: #3a81c3;">]</span>,eax
 </pre>
 </div>
 
 </section>
+<section id="slide-orga4bd5d1">
+<h3 id="orga4bd5d1">JNR tricks</h3>
+<p>
+Mostly <code>@Annotations</code>
+</p>
+
+</section>
+<section id="slide-orgecb86cb">
+<h3 id="orgecb86cb"><code>@IgnoreError</code></h3>
+<ul>
+<li>JVM (OpenJDK) uses <code>errno</code></li>
+<li>So does some C code</li>
+<li>Gotta save and restore</li>
+
+</ul>
+
+</section>
+<section id="slide-org41f8858">
+<h3 id="org41f8858"><code>@In</code> and <code>@Out</code></h3>
+<ul>
+<li>Value gets copied to &amp; from</li>
+<li><code>@In</code>: only copy to native</li>
+<li><code>@Out</code>: only copy from native</li>
+
+</ul>
+
+</section>
+<section id="slide-org600c4be">
+<h3 id="org600c4be"><code>@Pinned</code></h3>
+<ul>
+<li>Don't copy the value at all</li>
+<li>Tell JVM not to move it</li>
+<li>Pass the pointer straight to C</li>
+
+</ul>
+
+</section>
+<section id="slide-org030a417">
+<h3 id="org030a417"><code>@Direct</code> and <code>@Transient</code></h3>
+<p>
+Native backing memory
+</p>
+
+</section>
+<section id="slide-org54cd386">
+<h3 id="org54cd386">Opt-in</h3>
+
+</section>
 </section>
 <section>
-<section id="slide-org4925d36">
-<h2 id="org4925d36">How Clojure helped</h2>
-<div class="outline-text-2" id="text-org4925d36">
+<section id="slide-org95bba54">
+<h2 id="org95bba54">How Clojure helped</h2>
+<div class="outline-text-2" id="text-org95bba54">
 </div></section>
-<section id="slide-orgc6590ad">
-<h3 id="orgc6590ad"><code>caesium</code></h3>
+<section id="slide-org48e6057">
+<h3 id="org48e6057"><code>caesium</code></h3>
 <p>
 Look Ma, no Java!
 </p>
 
 </section>
-<section id="slide-org66bfae8">
-<h3 id="org66bfae8">Host interop</h3>
+<section id="slide-org6741c69">
+<h3 id="org6741c69">Host interop</h3>
 <p>
 Doesn't hide Java/JVM
 </p>
 
 </section>
-<section id="slide-org7bcd361">
-<h3 id="org7bcd361"><code>definterface</code></h3>
+<section id="slide-orga059043">
+<h3 id="orga059043"><code>definterface</code></h3>
 <div class="org-src-container">
 
-<pre  class="src src-clojure"><span style="color: #c5c8c6;">(</span><span style="color: #b5bd68;">definterface</span> <span style="color: #de935f;">LibC</span>
-  <span style="color: #8abeb7;">(</span>^int gettimeofday
-   <span style="color: #f0c674;">[</span>^<span style="color: #81a2be;">Timeval</span> ^<span style="color: #b5bd68;">{</span><span style="color: #81a2be;">Out</span> <span style="color: #81a2be;">{}</span> <span style="color: #81a2be;">Transient</span> <span style="color: #81a2be;">{}</span><span style="color: #b5bd68;">}</span> tv
-    ^<span style="color: #81a2be;">Pointer</span> unused<span style="color: #f0c674;">]</span><span style="color: #8abeb7;">)</span><span style="color: #c5c8c6;">)</span>
+<pre  class="src src-clojure"><span style="color: #3a81c3;">(</span><span style="color: #3a81c3; font-weight: bold;">definterface</span> <span style="color: #6c3163; font-weight: bold;">LibC</span>
+  <span style="color: #6c3163;">(</span>^int gettimeofday
+   <span style="color: #2d9574;">[</span>^<span style="color: #ba2f59; font-weight: bold;">Timeval</span> ^<span style="color: #67b11d;">{</span><span style="color: #ba2f59; font-weight: bold;">Out</span> <span style="color: #b1951d;">{}</span> <span style="color: #ba2f59; font-weight: bold;">Transient</span> <span style="color: #b1951d;">{}</span><span style="color: #67b11d;">}</span> tv
+    ^<span style="color: #ba2f59; font-weight: bold;">Pointer</span> unused<span style="color: #2d9574;">]</span><span style="color: #6c3163;">)</span><span style="color: #3a81c3;">)</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-org8dbc067">
-<h3 id="org8dbc067">The Clojure way</h3>
+<section id="slide-org6079785">
+<h3 id="org6079785">The Clojure way</h3>
 <ul>
 <li>Have some data</li>
 <li>Don't mess it up</li>
@@ -574,32 +635,32 @@ Doesn't hide Java/JVM
 </ul>
 
 </section>
-<section id="slide-org8dcb787">
-<h3 id="org8dcb787">Some data</h3>
+<section id="slide-org89240c8">
+<h3 id="org89240c8">Some data</h3>
 <div class="org-src-container">
 
-<pre  class="src src-clojure"><span style="color: #c5c8c6;">(</span><span style="color: #b5bd68;">def</span> ^<span style="color: #81a2be;">:private</span> <span style="color: #f0c674;">raw-bound-fns</span>
-  '<span style="color: #8abeb7;">[</span><span style="color: #f0c674;">[</span>^int sodium_init <span style="color: #b5bd68;">[]</span><span style="color: #f0c674;">]</span>
-    <span style="color: #f0c674;">[</span>^<span style="color: #81a2be;">String</span> sodium_version_string <span style="color: #b5bd68;">[]</span><span style="color: #f0c674;">]</span>
-    <span style="color: #f0c674;">[</span>^long ^<span style="color: #b5bd68;">{</span>size_t <span style="color: #81a2be;">{}</span><span style="color: #b5bd68;">}</span> crypto_secretbox_macbytes <span style="color: #b5bd68;">[]</span><span style="color: #f0c674;">]</span>
-    <span style="color: #f0c674;">[</span>^<span style="color: #81a2be;">String</span> crypto_secretbox_primitive <span style="color: #b5bd68;">[]</span><span style="color: #f0c674;">]</span>
-    <span style="color: #f0c674;">[</span>^int crypto_secretbox_easy
-     <span style="color: #b5bd68;">[</span>^bytes ^<span style="color: #81a2be;">{</span><span style="color: #81a2be;">Pinned</span> <span style="color: #c5c8c6;">{}</span><span style="color: #81a2be;">}</span> c
-      ^bytes ^<span style="color: #81a2be;">{</span><span style="color: #81a2be;">Pinned</span> <span style="color: #c5c8c6;">{}</span><span style="color: #81a2be;">}</span> m
-      ^long ^<span style="color: #81a2be;">{</span><span style="color: #81a2be;">LongLong</span> <span style="color: #c5c8c6;">{}</span><span style="color: #81a2be;">}</span> mlen
-      ^bytes ^<span style="color: #81a2be;">{</span><span style="color: #81a2be;">Pinned</span> <span style="color: #c5c8c6;">{}</span><span style="color: #81a2be;">}</span> n
-      ^bytes ^<span style="color: #81a2be;">{</span><span style="color: #81a2be;">Pinned</span> <span style="color: #c5c8c6;">{}</span><span style="color: #81a2be;">}</span> k<span style="color: #b5bd68;">]</span><span style="color: #f0c674;">]</span><span style="color: #8abeb7;">]</span>
-  <span style="color: #969896; font-style: italic;">;; </span><span style="color: #969896; font-style: italic;">...</span>
-  <span style="color: #c5c8c6;">)</span>
+<pre  class="src src-clojure"><span style="color: #3a81c3;">(</span><span style="color: #3a81c3; font-weight: bold;">def</span> ^<span style="color: #4e3163;">:private</span> <span style="color: #715ab1;">raw-bound-fns</span>
+  '<span style="color: #6c3163;">[</span><span style="color: #2d9574;">[</span>^int sodium_init <span style="color: #67b11d;">[]</span><span style="color: #2d9574;">]</span>
+    <span style="color: #2d9574;">[</span>^<span style="color: #ba2f59; font-weight: bold;">String</span> sodium_version_string <span style="color: #67b11d;">[]</span><span style="color: #2d9574;">]</span>
+    <span style="color: #2d9574;">[</span>^long ^<span style="color: #67b11d;">{</span>size_t <span style="color: #b1951d;">{}</span><span style="color: #67b11d;">}</span> crypto_secretbox_macbytes <span style="color: #67b11d;">[]</span><span style="color: #2d9574;">]</span>
+    <span style="color: #2d9574;">[</span>^<span style="color: #ba2f59; font-weight: bold;">String</span> crypto_secretbox_primitive <span style="color: #67b11d;">[]</span><span style="color: #2d9574;">]</span>
+    <span style="color: #2d9574;">[</span>^int crypto_secretbox_easy
+     <span style="color: #67b11d;">[</span>^bytes ^<span style="color: #b1951d;">{</span><span style="color: #ba2f59; font-weight: bold;">Pinned</span> <span style="color: #3a81c3;">{}</span><span style="color: #b1951d;">}</span> c
+      ^bytes ^<span style="color: #b1951d;">{</span><span style="color: #ba2f59; font-weight: bold;">Pinned</span> <span style="color: #3a81c3;">{}</span><span style="color: #b1951d;">}</span> m
+      ^long ^<span style="color: #b1951d;">{</span><span style="color: #ba2f59; font-weight: bold;">LongLong</span> <span style="color: #3a81c3;">{}</span><span style="color: #b1951d;">}</span> mlen
+      ^bytes ^<span style="color: #b1951d;">{</span><span style="color: #ba2f59; font-weight: bold;">Pinned</span> <span style="color: #3a81c3;">{}</span><span style="color: #b1951d;">}</span> n
+      ^bytes ^<span style="color: #b1951d;">{</span><span style="color: #ba2f59; font-weight: bold;">Pinned</span> <span style="color: #3a81c3;">{}</span><span style="color: #b1951d;">}</span> k<span style="color: #67b11d;">]</span><span style="color: #2d9574;">]</span><span style="color: #6c3163;">]</span>
+  <span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">...</span>
+  <span style="color: #3a81c3;">)</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-org39e73e0">
-<h3 id="org39e73e0">Expose every byte type</h3>
+<section id="slide-org75a7f7c">
+<h3 id="org75a7f7c">Expose every byte type</h3>
 <div class="org-src-container">
 
-<pre  class="src src-clojure"><span style="color: #c5c8c6;">(</span>mapcat permuted-byte-types raw-bound-fns<span style="color: #c5c8c6;">)</span>
+<pre  class="src src-clojure"><span style="color: #3a81c3;">(</span>mapcat permuted-byte-types raw-bound-fns<span style="color: #3a81c3;">)</span>
 </pre>
 </div>
 
@@ -610,78 +671,105 @@ Doesn't hide Java/JVM
 </ul>
 
 </section>
-<section id="slide-org86a4602">
-<h3 id="org86a4602"><code>@IgnoreError</code></h3>
-<ul>
-<li>JVM (OpenJDK) uses <code>errno</code></li>
-<li>So does some C code</li>
-<li>Gotta save and restore</li>
-
-</ul>
-
-</section>
-<section id="slide-orge22e125">
-<h3 id="orge22e125"><code>@IgnoreError</code></h3>
+<section id="slide-org57d26d4">
+<h3 id="org57d26d4"><code>@IgnoreError</code></h3>
 <p>
 Just map a function over some values
 </p>
 
 </section>
-<section id="slide-orgf802038">
-<h3 id="orgf802038"><code>defconsts</code></h3>
+<section id="slide-org3c6ec04">
+<h3 id="org3c6ec04"><code>defconsts</code></h3>
 <div class="org-src-container">
 
-<pre  class="src src-clojure"><span style="color: #969896; font-style: italic;">;; </span><span style="color: #969896; font-style: italic;">in caesium.crypto.secretbox</span>
-<span style="color: #c5c8c6;">(</span><span style="color: #b5bd68;">defconsts</span> <span style="color: #8abeb7;">[</span>keybytes noncebytes macbytes primitive<span style="color: #8abeb7;">]</span><span style="color: #c5c8c6;">)</span>
+<pre  class="src src-clojure"><span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">in caesium.crypto.secretbox</span>
+<span style="color: #3a81c3;">(</span><span style="color: #3a81c3; font-weight: bold;">defconsts</span> <span style="color: #6c3163;">[</span>keybytes noncebytes macbytes primitive<span style="color: #6c3163;">]</span><span style="color: #3a81c3;">)</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">=&gt;</span>
+<span style="color: #3a81c3;">(</span><span style="color: #3a81c3; font-weight: bold;">do</span>
+  <span style="color: #6c3163;">(</span><span style="color: #3a81c3; font-weight: bold;">def</span> <span style="color: #715ab1;">keybytes</span>
+    <span style="color: #2aa1ae;">"Constant returned by `</span><span style="color: #4e3163;">crypto_secretbox_keybytes</span><span style="color: #2aa1ae;">`.</span>
+<span style="color: #2aa1ae;">    See libsodium docs."</span>
+    <span style="color: #2d9574;">(</span>.crypto_secretbox_keybytes <span style="color: #ba2f59; font-weight: bold;">caesium.binding</span><span style="color: #655370; background-color: #fbf8ef;">/</span>sodium<span style="color: #2d9574;">)</span><span style="color: #6c3163;">)</span>
+  <span style="color: #2aa1ae; background-color: #ecf3ec;">;;</span><span style="color: #2aa1ae; background-color: #ecf3ec;">...</span>
+  <span style="color: #3a81c3;">)</span>
 </pre>
 </div>
 
 </section>
-<section id="slide-org1182ff9">
-<h3 id="org1182ff9">✨</h3>
+<section id="slide-orgaa640ee">
+<h3 id="orgaa640ee">✨</h3>
 <div class="org-src-container">
 
-<pre  class="src src-clojure"><span style="color: #969896; font-style: italic;">;; </span><span style="color: #969896; font-style: italic;">in caesium.crypto.box</span>
-<span style="color: #c5c8c6;">(</span>&#10024; open-easy m c n pk sk<span style="color: #c5c8c6;">)</span>
-<span style="color: #969896; font-style: italic;">;; </span><span style="color: #969896; font-style: italic;">=&gt;</span>
-<span style="color: #c5c8c6;">(</span>.crypto_box_open_easy
- m c <span style="color: #8abeb7;">(</span>long <span style="color: #f0c674;">(</span>buflen c<span style="color: #f0c674;">)</span><span style="color: #8abeb7;">)</span>
- n pk sk<span style="color: #c5c8c6;">)</span>
+<pre  class="src src-clojure"><span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">in caesium.crypto.box</span>
+<span style="color: #3a81c3;">(</span>&#10024; open-easy m c n pk sk<span style="color: #3a81c3;">)</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">=&gt;</span>
+<span style="color: #3a81c3;">(</span>.crypto_box_open_easy
+ m c <span style="color: #6c3163;">(</span>long <span style="color: #2d9574;">(</span>buflen c<span style="color: #2d9574;">)</span><span style="color: #6c3163;">)</span>
+ n pk sk<span style="color: #3a81c3;">)</span>
 </pre>
 </div>
 
+</section>
+<section id="slide-org4d10c92">
+<h3 id="org4d10c92">✨</h3>
+<div class="org-src-container">
+
+<pre  class="src src-clojure"><span style="color: #3a81c3;">(</span><span style="color: #3a81c3; font-weight: bold;">defmacro</span> <span style="color: #6c3163; font-weight: bold;">&#10024;</span>
+  <span style="color: #2aa1ae;">"Produces a form for calling named fn with lots of magic:</span>
+
+<span style="color: #2aa1ae;">  * The fn-name is specified using its short name, which is resolved</span>
+<span style="color: #2aa1ae;">    against the ns as per [[defconsts]].</span>
+<span style="color: #2aa1ae;">  * All bufs are annotated as ByteBuffers.</span>
+<span style="color: #2aa1ae;">  * Buffer lengths are automatically added.</span>
+
+<span style="color: #2aa1ae;">  The emoji name of this macro accurately reflects how easy I want it</span>
+<span style="color: #2aa1ae;">  to be for third parties to call it."</span>
+  <span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">...</span>
+  <span style="color: #3a81c3;">)</span>
+</pre>
+</div>
 </section>
 </section>
 <section>
-<section id="slide-org15a61f1">
-<h2 id="org15a61f1">Conclusion</h2>
-<div class="outline-text-2" id="text-org15a61f1">
+<section id="slide-org7527179">
+<h2 id="org7527179">Conclusion</h2>
+<div class="outline-text-2" id="text-org7527179">
 </div></section>
-<section id="slide-org5eae030">
-<h3 id="org5eae030">Yay open sores</h3>
+<section id="slide-org80c54b9">
+<h3 id="org80c54b9">Yay open sores</h3>
 <ul>
-<li>At least one bug in jnr</li>
-<li>At least one bug in Clojure</li>
-<li>Zero-copy for cffi (Python)</li>
+<li>JNR is great!</li>
+<li>At least one bug in jnr &amp; Clojure</li>
+<li>Zero-copy for cffi, PyCA/cryptography</li>
+
+</ul>
+
+</section>
+<section id="slide-orgbf1014e">
+<h3 id="orgbf1014e">Future work</h3>
+<ul>
+<li>CLJS (native library on V8, vs emscripten in the browser?)</li>
+<li>Ship native binaries with caesium</li>
+<li>Bind all of libsodium</li>
 
 </ul>
 
 </section>
 </section>
 <section>
-<section id="slide-org1473dd2">
-<h2 id="org1473dd2">Nonce-misuse resistant cryptography</h2>
-<div class="outline-text-2" id="text-org1473dd2">
+<section id="slide-orga6f774b">
+<h2 id="orga6f774b">Nonce-misuse resistant cryptography</h2>
+<div class="outline-text-2" id="text-orga6f774b">
 </div></section>
-<section id="slide-org56a4346">
-<h3 id="org56a4346">Encrypting with nonces</h3>
+<section id="slide-orgec96bca">
+<h3 id="orgec96bca">Encrypting with nonces</h3>
 <p>
 Number used once
 </p>
 
 </section>
-<section id="slide-org872779d">
-<h3 id="org872779d">What if I don't?</h3>
+<section id="slide-orgb55e005">
+<h3 id="orgb55e005">What if I don't?</h3>
 <ul>
 <li>Probably decrypt those ctexts</li>
 <li>Arbitrary forgeries afterwards</li>
@@ -689,37 +777,37 @@ Number used once
 </ul>
 
 </section>
-<section id="slide-org16d7363">
-<h3 id="org16d7363">API</h3>
+<section id="slide-org0b20edf">
+<h3 id="org0b20edf">API</h3>
 <p>
 <code>E(k, n, p) -&gt; c</code>
 </p>
 
 </section>
-<section id="slide-org046ed41">
-<h3 id="org046ed41">Is this the default API we want?</h3>
+<section id="slide-orgf45c9e9">
+<h3 id="orgf45c9e9">Is this the default API we want?</h3>
 
 </section>
-<section id="slide-org7e02b49">
-<h3 id="org7e02b49">GCM has other problems</h3>
+<section id="slide-org16babb7">
+<h3 id="org16babb7">GCM has other problems</h3>
 <p>
 (not gonna talk about them now)
 </p>
 
 </section>
-<section id="slide-orgadabf01">
-<h3 id="orgadabf01">Confusing!</h3>
+<section id="slide-org98b8c96">
+<h3 id="org98b8c96">Confusing!</h3>
 <p>
 GCM was the good ciphersuite, right?!
 </p>
 
 </section>
-<section id="slide-org45c4e3d">
-<h3 id="org45c4e3d">TLS alternatives are worse</h3>
+<section id="slide-org8d51aa5">
+<h3 id="org8d51aa5">TLS alternatives are worse</h3>
 
 </section>
-<section id="slide-org42fdf3b">
-<h3 id="org42fdf3b">GCM is fine <i>in 1 specific case</i></h3>
+<section id="slide-orgeccd87f">
+<h3 id="orgeccd87f">GCM is fine <i>in 1 specific case</i></h3>
 <ul>
 <li>Short-lived keys</li>
 <li>Coordination about nonces</li>
@@ -731,15 +819,15 @@ GCM was the good ciphersuite, right?!
 </p>
 
 </section>
-<section id="slide-org262c0d0">
-<h3 id="org262c0d0">Distributed systems</h3>
+<section id="slide-org8a97f0b">
+<h3 id="org8a97f0b">Distributed systems</h3>
 <p>
 Encrypting a cookie or DB entry
 </p>
 
 </section>
-<section id="slide-org1de0401">
-<h3 id="org1de0401">Programmers don't grok IVs/nonces</h3>
+<section id="slide-orgf9e2238">
+<h3 id="orgf9e2238">Programmers don't grok IVs/nonces</h3>
 <p>
 Evidence in how often they&#x2026;
 </p>
@@ -751,8 +839,8 @@ Evidence in how often they&#x2026;
 </ul>
 
 </section>
-<section id="slide-orge8dd51b">
-<h3 id="orge8dd51b">OK, so randomize the nonce!</h3>
+<section id="slide-org8aeec1e">
+<h3 id="org8aeec1e">OK, so randomize the nonce!</h3>
 <p>
 Nope!
 </p>
@@ -764,8 +852,8 @@ Nope!
 </ul>
 
 </section>
-<section id="slide-org041a34c">
-<h3 id="org041a34c">People still mess it up</h3>
+<section id="slide-org7b0258a">
+<h3 id="org7b0258a">People still mess it up</h3>
 <ul>
 <li>Nonce reuse in TLS</li>
 <li>Bad random during encryption</li>
@@ -773,8 +861,8 @@ Nope!
 </ul>
 
 </section>
-<section id="slide-orgb0e5ce9">
-<h3 id="orgb0e5ce9">Fernet</h3>
+<section id="slide-orga2391b4">
+<h3 id="orga2391b4">Fernet</h3>
 <ul>
 <li>Right API! <code>E(k, p) -&gt; c</code></li>
 <li>Safe! (IND-CCA2, EtM)</li>
@@ -784,15 +872,15 @@ Nope!
 </ul>
 
 </section>
-<section id="slide-org258de12">
-<h3 id="org258de12">Goals</h3>
+<section id="slide-orgc17ccc7">
+<h3 id="orgc17ccc7">Goals</h3>
 <p>
 Fernet, modern crypto done right
 </p>
 
 </section>
-<section id="slide-org7b4bd50">
-<h3 id="org7b4bd50">Goals</h3>
+<section id="slide-org298102d">
+<h3 id="org298102d">Goals</h3>
 <ul>
 <li>Easy API</li>
 <li>Only safe choices</li>
@@ -804,8 +892,8 @@ Fernet, modern crypto done right
 </ul>
 
 </section>
-<section id="slide-org46ed9ef">
-<h3 id="org46ed9ef">Busted RNG &amp; reused nonce</h3>
+<section id="slide-org8473ced">
+<h3 id="org8473ced">Busted RNG &amp; reused nonce</h3>
 <p>
 total catastrophe
 </p>
@@ -827,22 +915,22 @@ attacker can detect duplicates
 </p>
 
 </section>
-<section id="slide-orgab0c865">
-<h3 id="orgab0c865">Idea: synthesize nonce from plaintext</h3>
+<section id="slide-org6736960">
+<h3 id="org6736960">Idea: synthesize nonce from plaintext</h3>
 <p>
 (maybe mix with randomness)
 </p>
 
 </section>
-<section id="slide-org5a75128">
-<h3 id="org5a75128">Started as research about "keywrap"</h3>
+<section id="slide-orgf840496">
+<h3 id="orgf840496">Started as research about "keywrap"</h3>
 <p>
 Deterministic encryption
 </p>
 
 </section>
-<section id="slide-org9ec9676">
-<h3 id="org9ec9676"><code>magicnonce</code></h3>
+<section id="slide-org42ca90e">
+<h3 id="org42ca90e"><code>magicnonce</code></h3>
 <ul>
 <li><code>secretbox-rnd</code></li>
 <li><code>secretbox-det</code></li>
@@ -851,23 +939,23 @@ Deterministic encryption
 </ul>
 
 </section>
-<section id="slide-orge23eb8b">
-<h3 id="orge23eb8b">Rough idea</h3>
+<section id="slide-orgd062432">
+<h3 id="orgd062432">Rough idea</h3>
 <p>
 BLAKE2b as a PRF →  nonce
 XSalsa20 + Poly1305 (big nonce space)
 </p>
 
 </section>
-<section id="slide-org8dd5986">
-<h3 id="org8dd5986">Perf!</h3>
+<section id="slide-org9080240">
+<h3 id="org9080240">Perf!</h3>
 <p>
 Pretty good (but wait for the paper)
 </p>
 
 </section>
-<section id="slide-org74a8ff6">
-<h3 id="org74a8ff6">What about CAESAR?</h3>
+<section id="slide-orgf3d14a6">
+<h3 id="orgf3d14a6">What about CAESAR?</h3>
 <ul>
 <li>Serves any masters!</li>
 <li>Only 1 NMR suite in round 3: AEZ</li>
@@ -877,14 +965,24 @@ Pretty good (but wait for the paper)
 </ul>
 
 </section>
-<section id="slide-org310d81f">
-<h3 id="org310d81f">What about GCM-SIV?</h3>
+<section id="slide-org13d04f6">
+<h3 id="org13d04f6">What about GCM-SIV?</h3>
 
 </section>
 </section>
 <section>
-<section id="slide-org6eaf5e2">
-<h2 id="org6eaf5e2">Q&amp;A</h2>
+<section id="slide-orga310704">
+<h2 id="orga310704">Thanks!</h2>
+<ul>
+<li>Wayne Meissner, Charles Nutter (JNR)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7d71a2d">
+<h2 id="org7d71a2d">Q&amp;A</h2>
 <p>
 <code>@lvh</code>
 </p>
@@ -894,14 +992,18 @@ Pretty good (but wait for the paper)
 </p>
 
 <p>
-<code>lvh@latacora.com</code>, <code>https://latacora.com</code>
+<code>https://latacora.com</code>
+</p>
+
+<p>
+<code>{lvh,youagain}@latacora.com</code>
 </p>
 
 </section>
 </section>
 <section>
-<section id="slide-org3fc5a4d">
-<h2 id="org3fc5a4d">Slides</h2>
+<section id="slide-orgcec21f9">
+<h2 id="orgcec21f9">Slides</h2>
 <p>
 <a href="https://lvh.io/CCryptoClojure">https://lvh.io/CCryptoClojure</a>
 </p>
